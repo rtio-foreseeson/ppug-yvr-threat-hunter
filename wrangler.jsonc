@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "ppug-threat-intel-hunter",
+  "name": "ppug-yvr-threat-hunter",
   "main": "src/server.ts",
   "compatibility_date": "2026-10-19",
   "compatibility_flags": ["nodejs_compat"],

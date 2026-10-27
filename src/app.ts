@@ -9,8 +9,8 @@ export type Scenario = {
 };
 
 export const APP = {
-  slug: "ppug-threat-intel-hunter",
-  name: "Threat Intel Hunter",
+  slug: "ppug-yvr-threat-hunter",
+  name: "Threat Hunter",
   tagline: "Browser Run renders it. Clef judges it. Clairic pulls the IOCs.",
   scenarios: [
     {

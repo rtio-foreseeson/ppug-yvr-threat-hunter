@@ -1,4 +1,4 @@
-# Threat Intel Hunter
+# Threat Hunter
 
 **Cloudflare Peer Point User Group: System One hackathon starter**
 
@@ -7,7 +7,7 @@ One models analyse it in parallel: **Clef** judges the screenshot plus the page 
 pulls out indicators of compromise. An LLM writes the analyst report. This is the same pattern
 Cloudflare's own threat intelligence team uses Clef for.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/vnikhilbuddhavarapu/ppug-threat-intel-hunter)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/vnikhilbuddhavarapu/ppug-yvr-threat-hunter)
 
 ```
  "is this safe?"   ┌──────────── Durable Object (one per chat session) ─────────────┐
@@ -47,8 +47,8 @@ Cloudflare's own threat intelligence team uses Clef for.
 Prerequisites: Node.js 24+, and a Cloudflare account (provided at the event).
 
 ```bash
-git clone https://github.com/vnikhilbuddhavarapu/ppug-threat-intel-hunter
-cd ppug-threat-intel-hunter
+git clone https://github.com/vnikhilbuddhavarapu/ppug-yvr-threat-hunter
+cd ppug-yvr-threat-hunter
 npm install
 npx wrangler login        # Workers AI has no local simulator, so dev talks to your account
 npm run dev               # http://localhost:5173

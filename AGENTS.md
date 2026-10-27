@@ -1,4 +1,4 @@
-# AGENTS.md: Threat Intel Hunter (PPUG System One starter)
+# AGENTS.md: Threat Hunter (PPUG System One starter)
 
 Context for AI coding agents (OpenCode, Devin, Claude Code, Cursor) working in this repo.
 
