@@ -127,7 +127,10 @@ describe("IOC clean-up", () => {
       payment_amount: { type: "number", value: 49.99 },
     } as unknown as IocAnswers;
     const iocs = collectIocs(answers, page);
-    expect(iocs.domains).toEqual(["cloudfiare-support.example"]);
+    expect(iocs.domains).toEqual([
+      "cloudfiare-support.example",
+      "cf-account-verify.example",
+    ]);
     expect(iocs.crypto_wallets).toEqual([
       "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
     ]);

@@ -222,6 +222,10 @@ export function collectIocs(a: IocAnswers, page: RenderedPage) {
         .map((v) => String(v).trim())
         .map((v) => (phone ? v : expandToToken(source, v)))
         .map((v) => v.replace(/^https?:\/\//i, "").replace(/\/.*$/, ""))
+        // A domain inside an email address expands to the whole address; keep the domain part.
+        .map((v) =>
+          valid === DOMAIN && v.includes("@") ? (v.split("@").pop() ?? v) : v,
+        )
         .filter((v) => valid.test(v)),
     );
   const host = new URL(page.finalUrl).hostname;
