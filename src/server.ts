@@ -163,7 +163,7 @@ export class ChatAgent extends SystemOneAgent {
 
   private lookup_history(host: string) {
     let db_result = this
-      .sql`SELECT FROM scans (id, at, url, host, label, risk, summary) WHERE host = '${host}'`;
+      .sql`SELECT id, at, url, host, label, risk, summary FROM scans WHERE host = '${host}'`;
     if (db_result == null) {
       return {
         found_url: "false",
