@@ -52,6 +52,18 @@ export class ChatAgent extends SystemOneAgent {
         }),
         execute: async ({ url }) => this.scan(url),
       }),
+      lookup_history: tool({
+        description:
+          "Check the agent's database for existing scans of the URL.",
+        inputSchema: z.object({
+          url: z
+            .string()
+            .describe(
+              "Full URL, bare domain, or a /demo/... path served by this app",
+            ),
+        }),
+        execute: async ({ url }) => this.lookup_history(url),
+      }),
       // CHECKPOINT 1: give Hunter a memory of past scans (lookup_history, watch tools). See README.
     };
   }
@@ -145,6 +157,19 @@ export class ChatAgent extends SystemOneAgent {
       ...this.state,
       scans: [scan, ...this.state.scans].slice(0, MAX_SCANS),
     });
+  }
+
+  private lookup_history(host: string) {
+    let db_result = this
+      .sql`SELECT FROM scans (id, at, url, host, label, risk, summary) WHERE host = '${host}'`;
+    if (db_result == null) {
+      return {
+        found_url: "false",
+      };
+    } else {
+      console.log(db_result);
+      return db_result[0];
+    }
   }
 
   /** The public origin of this Worker, so `/demo/...` paths resolve to our sample pages. */
