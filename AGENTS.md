@@ -29,6 +29,7 @@ checkpoints (see README.md). Keep changes small, demoable and consistent with th
   - CHECKPOINT 1 (attendee): `lookup_history` tool over the `scans` table.
   - CHECKPOINT 2 (attendee): `watch_url` tool, `this.scheduleEvery(...)`, `rescanWatchlist()`, and
     `this.deliverNotice(...)` for alerts.
+  - CHECKPOINT 3 (attendee, boss level): `triage_email` tool. Clairic extracts the sender, links, deadline and amount; Clef judges the email; links go through `this.scan()` one at a time (max 3); the worst signal wins.
   - The `fetch` handler serves `/demo/*` sample pages and `/api/evidence/scans/<uuid>.jpg` from R2.
 - `src/intel/browser.ts`: Browser Run via `@cloudflare/puppeteer`, `normalizeUrl`, `toDataUrl`.
 - `src/intel/analysis.ts`: `VERDICT_QUESTIONS`, `IOC_FIELDS`, `evaluateVerdict()`, `collectIocs()`

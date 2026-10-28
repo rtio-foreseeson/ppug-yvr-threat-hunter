@@ -77,16 +77,18 @@ Then try your own URLs. Click a thumbnail in **Recent scans** to see the full sc
 
 ## Checkpoints
 
-The event runs for 90 minutes. Checkpoint 0 already works; the rest are yours.
+You have about **2 hours** of build time. Checkpoint 0 already works. Checkpoints 1 and 2 take most
+people 30-40 minutes each. Checkpoint 3 is the boss level: big enough to fill the rest of the time and
+make a great demo.
 
-### CHECKPOINT 0: explore the pipeline (10 min)
+### CHECKPOINT 0: explore the pipeline (15 min)
 
 - [`src/intel/analysis.ts`](src/intel/analysis.ts): `VERDICT_QUESTIONS` (Clef) and `IOC_FIELDS` (Clairic) are the
   whole classifier. Add a category, a brand, or a question like *"Is this a fake crypto giveaway?"*.
 - `evaluateVerdict()` turns probabilities into **malicious / suspicious / clean**.
 - [`src/server.ts`](src/server.ts) → `scan()` runs the pipeline. Note the `Promise.all`: Clef and Clairic run in parallel.
 
-### CHECKPOINT 1: give Hunter a memory (25 min)
+### CHECKPOINT 1: give Hunter a memory (30-40 min)
 
 Every scan is already written to a `scans` table in the agent's SQLite (`saveScan()`). Add tools so
 Hunter can use it:
@@ -99,7 +101,7 @@ const rows = this.sql<{ at: number; url: string; label: string; risk: number }>`
   SELECT at, url, label, risk FROM scans WHERE host = ${host} ORDER BY at DESC LIMIT 10`;
 ```
 
-### CHECKPOINT 2: watchlist with scheduled re-scans (25 min)
+### CHECKPOINT 2: watchlist with scheduled re-scans (30-40 min)
 
 Phishing kits often go live *after* a domain has been scanned clean. Add:
 
@@ -109,7 +111,47 @@ Phishing kits often go live *after* a domain has been scanned clean. Add:
 3. `async rescanWatchlist()`: re-run `this.scan(url)` for each entry. If the verdict changed, post an
    alert into the chat with `await this.deliverNotice({ markdown: "…" })`.
 
-### Stretch goals (if you're fast)
+### CHECKPOINT 3, the boss level: phishing email triage (rest of the build time)
+
+Most phishing doesn't arrive as a URL; it arrives as an email. Teach Hunter to triage the whole thing.
+
+1. **Add a `triage_email({ email })` tool** in `src/server.ts`.
+2. **Extract with Clairic.** Pull typed values out of the email: `sender` (text), `reply_to`
+   (text), `links` (a list of text), `brand_claimed` (text), `deadline_hours` (duration, hours) and
+   `amount_requested` (number, USD). Clean the links up in code, like `collectIocs()` does.
+3. **Decide with Clef** on the email itself: does it impersonate a brand, pressure the reader with
+   urgency, ask for credentials or payment, or have a sender that doesn't match the brand? Add an
+   overall `risk` score too.
+4. **Scan the links** with the existing `this.scan(url)`, at most 3 links and one at a time, so you
+   stay inside Browser Run's concurrency limits. You get screenshots and verdicts for free.
+5. **One verdict for the email.** Combine them: the email is as bad as its worst signal, whether
+   that's the email itself or any link. Return a short report, and let the LLM write the analyst summary.
+
+Test email (fake, safe; `/demo/...` resolves to this app's sample pages):
+
+```text
+From: Cloudflare Security <security@cloudfIare-support.example>
+Reply-To: billing-desk@protonmail.example
+Subject: Action required: your account will be suspended
+
+We detected unusual sign-in activity on your Cloudflare account. Verify your identity
+within 24 hours or all zones and Workers will be permanently deleted.
+
+Verify now: /demo/cloudflare-verify
+A $49.99 reactivation fee applies. Questions? Call +1 (415) 555-0199.
+```
+
+**Done when:** pasting that email returns one **malicious** verdict, with the sender mismatch,
+the deadline, the amount and a screenshot of the scanned link.
+
+### Or: bring your own use case
+
+Have a better idea? Use this starter as a base and build anything with Clef or Clairic. The agent,
+UI, Decision Trace and AI Gateway wiring are all reusable. See the
+[hackathon guide](https://github.com/vnikhilbuddhavarapu/ppug-yvr-system-one-hackathon#bring-your-own-use-case)
+for ideas and the two ground rules.
+
+### More stretch ideas
 
 - **Block it for real**: push malicious domains to a Cloudflare Zero Trust Gateway list or a WAF
   custom list via the Cloudflare API, so detection turns into enforcement.
@@ -120,7 +162,7 @@ Phishing kits often go live *after* a domain has been scanned clean. Add:
 - **Fine-tuning story**: tag scans with AI Gateway `metadata`. Those logs are your Clef fine-tuning
   dataset.
 
-A reference implementation of checkpoints 1 and 2 lives on the `solutions` branch.
+Stuck on a checkpoint? Ask a Cloudflare facilitator: we have reference implementations and can point you in the right direction.
 
 ## How it works
 
