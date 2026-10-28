@@ -167,9 +167,8 @@ export class ChatAgent extends SystemOneAgent {
       url: string;
       label: string;
       risk: number;
-    }>`
-  SELECT at, url, label, risk FROM scans WHERE host = ${host} ORDER BY at DESC LIMIT 10`;
-    if ((rows.length = 0)) {
+    }>`SELECT at, url, label, risk FROM scans WHERE host = ${host} ORDER BY at DESC LIMIT 10`;
+    if (rows.length == 0) {
       return {
         found_url: "false",
       };
