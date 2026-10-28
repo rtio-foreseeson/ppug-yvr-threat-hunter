@@ -43,6 +43,7 @@ export const VERDICT_QUESTIONS = {
       apple: "Apple",
       paypal: "PayPal",
       amazon: "Amazon",
+      netflix: "Netflix",
       bank: "A bank",
       other_brand: "Another well-known brand",
     },
@@ -51,6 +52,11 @@ export const VERDICT_QUESTIONS = {
     type: "noul",
     instructions:
       "Does the page ask for a password, one-time code, recovery phrase or payment card?",
+  },
+  crypto_giveaway: {
+    type: "noul",
+    instructions:
+    "Does the page ask for a crypto wallet, or offer any free cryptocurrency such as bitcoin of ethereum?"
   },
   urgency_pressure: {
     type: "noul",
