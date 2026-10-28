@@ -162,15 +162,19 @@ export class ChatAgent extends SystemOneAgent {
   }
 
   private lookup_history(host: string) {
-    let db_result = this
-      .sql`SELECT id, at, url, host, label, risk, summary FROM scans WHERE host = '${host}'`;
-    if (db_result == null) {
+    const rows = this.sql<{
+      at: number;
+      url: string;
+      label: string;
+      risk: number;
+    }>`
+  SELECT at, url, label, risk FROM scans WHERE host = ${host} ORDER BY at DESC LIMIT 10`;
+    if ((rows.length = 0)) {
       return {
         found_url: "false",
       };
     } else {
-      console.log(db_result);
-      return db_result[0];
+      return rows;
     }
   }
 
