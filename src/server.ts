@@ -161,7 +161,10 @@ export class ChatAgent extends SystemOneAgent {
     });
   }
 
-  private lookup_history(host: string) {
+  private async lookup_history(input: string) {
+    const target = normalizeUrl(input, this.origin());
+    const page = await renderPage(this.env.BROWSER, target.toString());
+    const host = new URL(page.finalUrl).hostname;
     const rows = this.sql<{
       at: number;
       url: string;
